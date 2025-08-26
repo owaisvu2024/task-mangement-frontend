@@ -1,3 +1,4 @@
+import api from "./api";  // file ke top pe add karna
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -26,13 +27,14 @@ const Auth = ({ onAuthSuccess }) => {
             let res;
             if (isLogin) {
                 // Login
-                res = await axios.post('http://localhost:5000/api/auth/login', body, config);
-                localStorage.setItem('token', res.data.token);
+                res = await api.post('/api/auth/login', body, config);
+localStorage.setItem('token', res.data.token);
                 alert('Login successful!');
             } else {
                 // Register
-                res = await axios.post('http://localhost:5000/api/auth/register', body, config);
-                alert(res.data.message);
+                res = await api.post('/api/auth/register', body, config);
+alert(res.data.message);
+
                 setIsLogin(true); // Registration ke baad login form dikhao
             }
             onAuthSuccess(res.data.token);

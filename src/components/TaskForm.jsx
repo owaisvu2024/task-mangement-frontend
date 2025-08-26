@@ -1,3 +1,4 @@
+import api from "./api";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -26,7 +27,7 @@ const TaskForm = ({ onTaskAdded, taskToEdit, onTaskUpdated, onCancel }) => {
             if (taskToEdit) {
                 await onTaskUpdated({ ...task, _id: taskToEdit._id });
             } else {
-                await axios.post('http://localhost:5000/api/tasks', task);
+                await api.post('/api/tasks', task);
                 setTitle('');
                 setDescription('');
                 setStatus('Pending');

@@ -1,3 +1,4 @@
+import api from "./api";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -11,13 +12,11 @@ const AnalyticsDashboard = () => {
         const fetchData = async () => {
             try {
                 // Fetch summary stats
-                const statsResponse = await axios.get('http://localhost:5000/api/analytics/overview');
-                setStats(statsResponse.data);
-
+                const statsResponse = await api.get('/api/analytics/overview');
+setStats(statsResponse.data);
                 // Fetch trends data
-                const trendsResponse = await axios.get('http://localhost:5000/api/analytics/trends');
-                setTrends(trendsResponse.data);
-
+                const trendsResponse = await api.get('/api/analytics/trends');
+setTrends(trendsResponse.data);
                 setLoading(false);
             } catch (err) {
                 setError('Failed to fetch analytics data.');
