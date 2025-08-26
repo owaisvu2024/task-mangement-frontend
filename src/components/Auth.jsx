@@ -1,4 +1,4 @@
-import api from "./api";  // file ke top pe add karna
+import api from "../api";  // file ke top pe add karna
 import React, { useState } from 'react';
 import axios from 'axios';
 
