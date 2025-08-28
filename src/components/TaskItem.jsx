@@ -9,7 +9,6 @@ const TaskItem = ({ task, onDelete, onUpdate }) => {
             margin: '10px', 
             backgroundColor: '#291313ff', 
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-            minWidth: '250px',
             flex: '1',
             boxSizing: 'border-box'
         }}>

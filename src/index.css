@@ -1,58 +1,230 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Global Variables for Colors (Dark/Light Mode) */
+:root {
+  --background-color: #f4f6f8;
+  --text-color: #34495e;
+  --card-background: #ffffff;
+  --button-background: #34495e;
+  --button-text: #ecf0f1;
+  --border-color: #bdc3c7;
+  --input-background: #ecf0f1;
+  --input-text: #34495e;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body.dark {
+  --background-color: #000000;  /* Ab background bilkul black ho jayega */
+  --text-color: #ffffff;
+  --card-background: #1e1e1e;
+  --button-background: #333333;
+  --button-text: #ffffff;
+  --border-color: #555555;
+  --input-background: #1e1e1e;
+  --input-text: #ffffff;
 }
-/* index.css */
 
-/* Global styles */
+/* Base Styles */
 body {
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Mobile responsiveness ke liye media queries */
-@media (max-width: 768px) {
-  .container {
+.app-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  animation: fadeIn 1s ease-in-out;
+  box-sizing: border-box; /* Padding include ho width mein */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Typography */
+.main-title {
+  text-align: center;
+  color: var(--text-color);
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Header Buttons Layout (Fixed with Flexbox) */
+.header-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap; /* NEW: Mobile par buttons wrap ho jayenge */
+}
+
+.header-button {
+  padding: 12px 25px;
+  background: var(--button-background);
+  color: var(--button-text);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.header-button:hover {
+  transform: scale(1.05);
+}
+
+/* Search and Filter Section */
+.search-filter-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap; /* NEW: Mobile par wrap hoga */
+}
+
+.search-input,
+.status-filter {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background-color: var(--input-background);
+  color: var(--input-text);
+  transition: all 0.3s ease;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.search-input {
+  flex: 1;
+}
+
+.status-filter {
+  cursor: pointer;
+}
+
+/* Notifications */
+.notification-container {
+  border: 2px solid #2ecc71;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #1abc9c;
+  color: white;
+  border-radius: 15px;
+  animation: fadeIn 0.5s ease;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+}
+
+.notification-heading {
+  color: white;
+  margin: 0 0 10px 0;
+}
+
+.notification-text {
+  margin: 0;
+  color: white;
+}
+
+/* Custom Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--card-background);
+  color: var(--text-color);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  text-align: center;
+  animation: popIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-message {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.modal-input {
+  margin: 20px 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--input-background);
+  color: var(--input-text);
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.modal-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #2980b9; /* Default OK button color */
+  color: white;
+}
+
+.modal-button.cancel {
+  background-color: #7f8c8d;
+}
+
+.modal-button.share {
+  background-color: #27ae60;
+}
+
+.modal-button:hover {
+  transform: scale(1.05);
+}
+
+/* Task Status Colors (Variables) */
+:root {
+  --pending-color: #f39c12;
+  --in-progress-color: #3498db;
+  --completed-color: #2ecc71;
+  --default-color: #bdc3c7;
+}
+
+/* Responsive Styles for Mobile */
+@media (max-width: 600px) {
+  .app-container {
     padding: 10px;
+    margin: 20px auto;
   }
-
-  .card {
-    width: 100%;
-    margin: 10px 0;
+  .main-title {
+    font-size: 2rem;
   }
-
-  nav {
+  .header-buttons, .search-filter-container {
     flex-direction: column;
-    align-items: center;
-  }
-
-  nav a {
-    margin: 5px 0;
-  }
-}
-
-@media (max-width: 480px) {
-  body {
-    font-size: 14px;
-  }
-
-  .button {
-    width: 100%;
-    padding: 12px;
-  }
-
-  .header h1 {
-    font-size: 20px;
+    align-items: stretch;
   }
 }

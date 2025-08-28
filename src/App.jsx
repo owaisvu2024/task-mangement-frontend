@@ -189,118 +189,44 @@ function App() {
   const getStatusColor = (status) => {
     switch (status) {
       case 'Pending':
-        return '#f39c12';
+        return 'var(--pending-color)';
       case 'In Progress':
-        return '#3498db';
+        return 'var(--in-progress-color)';
       case 'Completed':
-        return '#2ecc71';
+        return 'var(--completed-color)';
       default:
-        return '#bdc3c7';
+        return 'var(--default-color)';
     }
   };
 
   return (
-    <div
-      className="app-container"
-      style={{
-        fontFamily: 'Roboto, sans-serif',
-        maxWidth: '800px',
-        margin: '0 auto',
-        padding: '40px',
-        backgroundColor: '#1f2a38',
-        borderRadius: '20px',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px',
-        border: '2px solid #34495e',
-      }}
-    >
-      <h1
-        style={{
-          textAlign: 'center',
-          color: '#ecf0f1',
-          fontSize: '2.5rem',
-          fontWeight: '700',
-          textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-        }}
-      >
-        Task Manager App
-      </h1>
+    <div className="app-container">
+      <h1 className="main-title">Task Manager App</h1>
 
       {!isLoggedIn ? (
         <Auth onAuthSuccess={handleAuthSuccess} />
       ) : (
         <>
           {/* Header buttons */}
-          <div
-            style={{
-              textAlign: 'right',
-              marginBottom: '20px',
-              display: 'flex',
-              justifyContent: 'flex-end',
-              gap: '10px',
-              flexWrap: 'wrap',
-            }}
-          >
+          <div className="header-buttons">
             {/* NEW: Dark mode toggle */}
             <button
               onClick={() => setDarkMode((d) => !d)}
-              style={{
-                padding: '12px 25px',
-                background: '#34495e',
-                color: 'white',
-                border: 'none',
-                borderRadius: '10px',
-                cursor: 'pointer',
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
-              }}
-              onMouseEnter={(e) => (e.target.style.transform = 'scale(1.05)')}
-              onMouseLeave={(e) => (e.target.style.transform = 'scale(1)')}
+              className="header-button"
             >
               {darkMode ? 'Light Mode' : 'Dark Mode'}
             </button>
 
             <button
               onClick={handleLogout}
-              style={{
-                padding: '12px 25px',
-                background: '#34495e',
-                color: 'white',
-                border: 'none',
-                borderRadius: '10px',
-                cursor: 'pointer',
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
-              }}
-              onMouseEnter={(e) => (e.target.style.transform = 'scale(1.05)')}
-              onMouseLeave={(e) => (e.target.style.transform = 'scale(1)')}
+              className="header-button"
             >
               Logout
             </button>
 
             <button
               onClick={() => setShowAnalytics(!showAnalytics)}
-              style={{
-                padding: '12px 25px',
-                background: '#34495e',
-                color: 'white',
-                border: 'none',
-                borderRadius: '10px',
-                cursor: 'pointer',
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
-              }}
-              onMouseEnter={(e) => (e.target.style.transform = 'scale(1.05)')}
-              onMouseLeave={(e) => (e.target.style.transform = 'scale(1)')}
+              className="header-button"
             >
               {showAnalytics ? 'View Tasks' : 'View Analytics'}
             </button>
@@ -308,21 +234,10 @@ function App() {
 
           {/* Notifications */}
           {notifications.length > 0 && (
-            <div
-              style={{
-                border: '2px solid #2ecc71',
-                padding: '15px',
-                marginBottom: '20px',
-                backgroundColor: '#1abc9c',
-                color: 'white',
-                borderRadius: '15px',
-                animation: 'fadeIn 0.5s ease',
-                boxShadow: '0 4px 15px rgba(46, 204, 113, 0.4)',
-              }}
-            >
-              <h3 style={{ color: '#ecf0f1', margin: '0 0 10px 0' }}>Notifications:</h3>
+            <div className="notification-container">
+              <h3 className="notification-heading">Notifications:</h3>
               {notifications.map((notif, index) => (
-                <p key={index} style={{ margin: '0', color: '#ecf0f1' }}>
+                <p key={index} className="notification-text">
                   {notif.message}
                 </p>
               ))}
@@ -335,43 +250,18 @@ function App() {
             <>
               <ProgressBar tasks={filteredTasks} />
 
-              <div
-                style={{
-                  marginBottom: '20px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  gap: '10px',
-                }}
-              >
+              <div className="search-filter-container">
                 <input
                   type="text"
                   placeholder="Search tasks by title..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: '12px',
-                    borderRadius: '10px',
-                    border: '1px solid #34495e',
-                    backgroundColor: '#34495e',
-                    color: '#ecf0f1',
-                    transition: 'all 0.3s ease',
-                    boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.3)',
-                  }}
+                  className="search-input"
                 />
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  style={{
-                    padding: '12px',
-                    borderRadius: '10px',
-                    border: '1px solid #34495e',
-                    backgroundColor: '#34495e',
-                    color: '#ecf0f1',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                  }}
+                  className="status-filter"
                 >
                   <option value="All">All</option>
                   <option value="Pending">Pending</option>
@@ -395,7 +285,6 @@ function App() {
                     onTaskUpdated={handleUpdateClick}
                     onTaskShared={handleShareTask}
                     getStatusColor={getStatusColor}
-                    // ====== NEW: jab attachments upload hon to list refresh ho ======
                     onAttachmentsChanged={fetchTasks}
                   />
                 </>
@@ -407,46 +296,12 @@ function App() {
 
       {/* Custom Alert Modal */}
       {showModal && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0,0,0,0.8)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1000,
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: '#34495e',
-              color: '#ecf0f1',
-              padding: '30px',
-              borderRadius: '15px',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-              textAlign: 'center',
-              animation: 'popIn 0.3s ease-out',
-            }}
-          >
-            <p style={{ margin: '0', fontSize: '1.1rem' }}>{modalMessage}</p>
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p className="modal-message">{modalMessage}</p>
             <button
               onClick={() => setShowModal(false)}
-              style={{
-                marginTop: '20px',
-                padding: '10px 20px',
-                background: '#2980b9',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => (e.target.style.transform = 'scale(1.05)')}
-              onMouseLeave={(e) => (e.target.style.transform = 'scale(1)')}
+              className="modal-button"
             >
               OK
             </button>
@@ -456,61 +311,19 @@ function App() {
 
       {/* Custom Prompt Modal */}
       {showPromptModal && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0,0,0,0.8)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1000,
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: '#34495e',
-              color: '#ecf0f1',
-              padding: '30px',
-              borderRadius: '15px',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-              display: 'flex',
-              flexDirection: 'column',
-              textAlign: 'center',
-              animation: 'popIn 0.3s ease-out',
-            }}
-          >
-            <p style={{ margin: '0', fontSize: '1.1rem' }}>{promptMessage}</p>
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p className="modal-message">{promptMessage}</p>
             <input
               type="text"
               value={promptInput}
               onChange={(e) => setPromptInput(e.target.value)}
-              style={{
-                margin: '20px 0',
-                padding: '10px',
-                borderRadius: '8px',
-                border: '1px solid #7f8c8d',
-                backgroundColor: '#2c3e50',
-                color: '#ecf0f1',
-              }}
+              className="modal-input"
             />
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+            <div className="modal-buttons">
               <button
                 onClick={() => setShowPromptModal(false)}
-                style={{
-                  padding: '10px 20px',
-                  background: '#7f8c8d',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.transform = 'scale(1.05)')}
-                onMouseLeave={(e) => (e.target.style.transform = 'scale(1)')}
+                className="modal-button cancel"
               >
                 Cancel
               </button>
@@ -519,17 +332,7 @@ function App() {
                   onPromptSubmit(promptInput);
                   setShowPromptModal(false);
                 }}
-                style={{
-                  padding: '10px 20px',
-                  background: '#27ae60',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.transform = 'scale(1.05)')}
-                onMouseLeave={(e) => (e.target.style.transform = 'scale(1)')}
+                className="modal-button share"
               >
                 Share
               </button>
@@ -538,49 +341,7 @@ function App() {
         </div>
       )}
 
-      {/* Animations + PAGE background (dark/light) */}
-      <style>
-        {`
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
-        /* PAGE background only (form colors same rahain) */
-        body {
-          background: #f4f6f8;
-        }
-        body.dark {
-          background: #000000; /* dark mode page bg */
-        }
-
-        .app-container {
-          animation: fadeIn 1s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes popIn {
-          from { transform: scale(0.8); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
-        }
-
-        .task-item {
-          background-color: #34495e;
-          color: #ecf0f1;
-          padding: 15px;
-          border-radius: 10px;
-          margin-bottom: 10px;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .task-item:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 8px 15px rgba(0,0,0,0.3);
-        }
-        `}
-      </style>
+      {/* Inline styles aur animations CSS file mein move kar diye gaye hain */}
     </div>
   );
 }

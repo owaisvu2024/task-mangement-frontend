@@ -27,13 +27,13 @@ const Auth = ({ onAuthSuccess }) => {
             let res;
             if (isLogin) {
                 // Login
-res = await axios.post(`${API_URL}/api/auth/login`, body, config);
-localStorage.setItem('token', res.data.token);
-alert('Login successful!');
-} else {
-// Register
-res = await axios.post(`${API_URL}/api/auth/register`, body, config);
-alert(res.data.message);
+                res = await axios.post(`${API_URL}/api/auth/login`, body, config);
+                localStorage.setItem('token', res.data.token);
+                alert('Login successful!');
+            } else {
+                // Register
+                res = await axios.post(`${API_URL}/api/auth/register`, body, config);
+                alert(res.data.message);
                 setIsLogin(true); // Registration ke baad login form dikhao
             }
             onAuthSuccess(res.data.token);
@@ -44,7 +44,7 @@ alert(res.data.message);
     };
 
     return (
-        <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+        <div style={{ width: '90%', maxWidth: '400px', margin: '50px auto', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
             <h2 style={{ textAlign: 'center', color: '#333' }}>
                 {isLogin ? 'Login' : 'Sign Up'}
             </h2>
