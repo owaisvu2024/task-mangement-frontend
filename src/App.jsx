@@ -1,4 +1,4 @@
-// Zaroori packages import kar rahe hain
+// src/App.jsx
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import TaskForm from './components/TaskForm';
@@ -8,20 +8,15 @@ import AnalyticsDashboard from './components/AnalyticsDashboard';
 import Auth from './components/Auth';
 import axios from 'axios';
 
-// ====== NEW: API base URL (local .env se utha lo; warna localhost) ======
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
-// Socket.IO client ko server se connect
 const socket = io(API_URL);
 
 function App() {
-  // ====== NEW: Dark Mode state (persist with localStorage) ======
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('darkMode');
-    return saved ? JSON.parse(saved) : true; // default: dark
+    return saved ? JSON.parse(saved) : true;
   });
 
-  // Application states
   const [tasks, setTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,7 +27,6 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [isLoggedIn, setIsLoggedIn] = useState(!!token);
 
-  // Custom Modals
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [showPromptModal, setShowPromptModal] = useState(false);
@@ -40,38 +34,28 @@ function App() {
   const [promptInput, setPromptInput] = useState('');
   const [onPromptSubmit, setOnPromptSubmit] = useState(null);
 
-  // ====== NEW: axios baseURL + auth header ======
   axios.defaults.baseURL = API_URL;
   axios.defaults.headers.common['Authorization'] = token;
 
-  // ====== NEW: apply dark class on <body> ======
   useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
+    if (darkMode) document.body.classList.add('dark');
+    else document.body.classList.remove('dark');
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
   }, [darkMode]);
 
-  // Notifications (Socket)
   useEffect(() => {
     socket.on('notification', (data) => {
-      setNotifications(prev => [data, ...prev]);
+      setNotifications((prev) => [data, ...prev]);
       showCustomAlert(`New Notification: ${data.message}`);
     });
-    return () => {
-      socket.off('notification');
-    };
+    return () => socket.off('notification');
   }, []);
 
-  // Custom Alert
   const showCustomAlert = (message) => {
     setModalMessage(message);
     setShowModal(true);
   };
 
-  // Custom Prompt
   const showCustomPrompt = (message, onSubmit) => {
     setPromptMessage(message);
     setPromptInput('');
@@ -79,53 +63,38 @@ function App() {
     setOnPromptSubmit(() => onSubmit);
   };
 
-  // Server se tasks fetch
   const fetchTasks = async () => {
     try {
       const personalResponse = await axios.get(`/api/tasks`);
-      const personalTasks = personalResponse.data;
       const sharedResponse = await axios.get(`/api/tasks/shared`);
-      const sharedTasks = sharedResponse.data;
-
       const uniqueTasksMap = new Map();
-      personalTasks.forEach(task => uniqueTasksMap.set(task._id, task));
-      sharedTasks.forEach(task => uniqueTasksMap.set(task._id, task));
-      const uniqueTasks = Array.from(uniqueTasksMap.values());
-
-      setTasks(uniqueTasks);
+      personalResponse.data.forEach((task) => uniqueTasksMap.set(task._id, task));
+      sharedResponse.data.forEach((task) => uniqueTasksMap.set(task._id, task));
+      setTasks(Array.from(uniqueTasksMap.values()));
     } catch (error) {
       console.error('Error fetching tasks:', error?.response);
-      if (error?.response && error.response.status === 401) {
-        handleLogout();
-      }
+      if (error?.response?.status === 401) handleLogout();
     }
   };
 
-  // Search/filter
   useEffect(() => {
     let filtered = [...tasks];
     if (searchQuery) {
-      filtered = filtered.filter(task =>
+      filtered = filtered.filter((task) =>
         task.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
     if (filterStatus !== 'All') {
-      filtered = filtered.filter(task => task.status === filterStatus);
+      filtered = filtered.filter((task) => task.status === filterStatus);
     }
     setFilteredTasks(filtered);
   }, [tasks, searchQuery, filterStatus]);
 
-  // Initial load
   useEffect(() => {
-    if (isLoggedIn && !showAnalytics) {
-      fetchTasks();
-    }
+    if (isLoggedIn && !showAnalytics) fetchTasks();
   }, [isLoggedIn, showAnalytics]);
 
-  // Handlers
-  const handleTaskAdded = async () => {
-    fetchTasks();
-  };
+  const handleTaskAdded = async () => fetchTasks();
 
   const handleDeleteTask = async (id) => {
     try {
@@ -136,9 +105,7 @@ function App() {
     }
   };
 
-  const handleUpdateClick = (task) => {
-    setEditingTask(task);
-  };
+  const handleUpdateClick = (task) => setEditingTask(task);
 
   const handleUpdateTask = async (updatedTask) => {
     try {
@@ -150,9 +117,7 @@ function App() {
     }
   };
 
-  const handleCancelUpdate = () => {
-    setEditingTask(null);
-  };
+  const handleCancelUpdate = () => setEditingTask(null);
 
   const handleShareTask = async (taskId) => {
     showCustomPrompt('Enter User ID to share with:', async (userId) => {
@@ -163,7 +128,11 @@ function App() {
           showCustomAlert('Task shared successfully!');
         } catch (error) {
           console.error('Error sharing task:', error?.response?.data?.message);
-          showCustomAlert(`Error sharing task: ${error?.response?.data?.message || 'Unknown error'}`);
+          showCustomAlert(
+            `Error sharing task: ${
+              error?.response?.data?.message || 'Unknown error'
+            }`
+          );
         }
       }
     });
@@ -207,23 +176,17 @@ function App() {
         <Auth onAuthSuccess={handleAuthSuccess} />
       ) : (
         <>
-          {/* Header buttons */}
-          <div className="header-buttons">
-            {/* NEW: Dark mode toggle */}
+          {/* HEADER BAR */}
+          <div className="header-bar">
             <button
               onClick={() => setDarkMode((d) => !d)}
               className="header-button"
             >
               {darkMode ? 'Light Mode' : 'Dark Mode'}
             </button>
-
-            <button
-              onClick={handleLogout}
-              className="header-button"
-            >
+            <button onClick={handleLogout} className="header-button logout">
               Logout
             </button>
-
             <button
               onClick={() => setShowAnalytics(!showAnalytics)}
               className="header-button"
@@ -232,7 +195,7 @@ function App() {
             </button>
           </div>
 
-          {/* Notifications */}
+          {/* NOTIFICATIONS */}
           {notifications.length > 0 && (
             <div className="notification-container">
               <h3 className="notification-heading">Notifications:</h3>
@@ -249,7 +212,6 @@ function App() {
           ) : (
             <>
               <ProgressBar tasks={filteredTasks} />
-
               <div className="search-filter-container">
                 <input
                   type="text"
@@ -270,31 +232,33 @@ function App() {
                 </select>
               </div>
 
-              {editingTask ? (
-                <TaskForm
-                  taskToEdit={editingTask}
-                  onTaskUpdated={handleUpdateTask}
-                  onCancel={handleCancelUpdate}
-                />
-              ) : (
-                <>
-                  <TaskForm onTaskAdded={handleTaskAdded} />
-                  <TaskList
-                    tasks={filteredTasks}
-                    onTaskDeleted={handleDeleteTask}
-                    onTaskUpdated={handleUpdateClick}
-                    onTaskShared={handleShareTask}
-                    getStatusColor={getStatusColor}
-                    onAttachmentsChanged={fetchTasks}
+              <div className="task-card">
+                {editingTask ? (
+                  <TaskForm
+                    taskToEdit={editingTask}
+                    onTaskUpdated={handleUpdateTask}
+                    onCancel={handleCancelUpdate}
                   />
-                </>
-              )}
+                ) : (
+                  <>
+                    <TaskForm onTaskAdded={handleTaskAdded} />
+                    <TaskList
+                      tasks={filteredTasks}
+                      onTaskDeleted={handleDeleteTask}
+                      onTaskUpdated={handleUpdateClick}
+                      onTaskShared={handleShareTask}
+                      getStatusColor={getStatusColor}
+                      onAttachmentsChanged={fetchTasks}
+                    />
+                  </>
+                )}
+              </div>
             </>
           )}
         </>
       )}
 
-      {/* Custom Alert Modal */}
+      {/* ALERT MODAL */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -309,7 +273,7 @@ function App() {
         </div>
       )}
 
-      {/* Custom Prompt Modal */}
+      {/* PROMPT MODAL */}
       {showPromptModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -340,8 +304,6 @@ function App() {
           </div>
         </div>
       )}
-
-      {/* Inline styles aur animations CSS file mein move kar diye gaye hain */}
     </div>
   );
 }
