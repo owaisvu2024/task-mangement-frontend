@@ -16,7 +16,7 @@ const TaskList = ({ tasks, onTaskDeleted, onTaskUpdated, onTaskShared }) => {
                             backgroundColor: '#f9f9f9',
                             display: 'flex',
                             justifyContent: 'space-between',
-                            alignItems: 'center'
+                            alignItems: 'flex-end'   // ✅ buttons & badge straight line me
                         }}
                     >
                         <div>
@@ -25,6 +25,9 @@ const TaskList = ({ tasks, onTaskDeleted, onTaskUpdated, onTaskShared }) => {
                             <span 
                                 style={{ 
                                     display: 'inline-block', 
+                                    minWidth: '100px',       // ✅ size stable
+                                    textAlign: 'center',
+                                    whiteSpace: 'nowrap',    // ✅ "In Progress" ek line me
                                     padding: '5px 10px', 
                                     borderRadius: '15px', 
                                     color: 'white', 
@@ -36,44 +39,24 @@ const TaskList = ({ tasks, onTaskDeleted, onTaskUpdated, onTaskShared }) => {
                                 {task.status}
                             </span>
                         </div>
-                        <div style={{ display: 'flex', gap: '5px' }}>
+
+                        {/* ✅ Buttons aligned properly */}
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-end' }}>
                             <button 
                                 onClick={() => onTaskUpdated(task)}
-                                style={{
-                                    padding: '8px 12px',
-                                    backgroundColor: '#007bff',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '5px',
-                                    cursor: 'pointer'
-                                }}
+                                style={btnStyleBlue}
                             >
                                 Update
                             </button>
                             <button 
                                 onClick={() => onTaskDeleted(task._id)}
-                                style={{
-                                    padding: '8px 12px',
-                                    backgroundColor: '#dc3545',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '5px',
-                                    cursor: 'pointer'
-                                }}
+                                style={btnStyleRed}
                             >
                                 Delete
                             </button>
-                            {/* Naya Share Button */}
                             <button 
                                 onClick={() => onTaskShared(task._id)}
-                                style={{
-                                    padding: '8px 12px',
-                                    backgroundColor: '#20c997',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '5px',
-                                    cursor: 'pointer'
-                                }}
+                                style={btnStyleGreen}
                             >
                                 Share
                             </button>
@@ -83,6 +66,37 @@ const TaskList = ({ tasks, onTaskDeleted, onTaskUpdated, onTaskShared }) => {
             </ul>
         </div>
     );
+};
+
+// 🎨 Reusable button styles
+const btnStyleBlue = {
+    padding: '8px 12px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '14px'
+};
+
+const btnStyleRed = {
+    padding: '8px 12px',
+    backgroundColor: '#dc3545',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '14px'
+};
+
+const btnStyleGreen = {
+    padding: '8px 12px',
+    backgroundColor: '#20c997',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '14px'
 };
 
 export default TaskList;
