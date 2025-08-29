@@ -1,102 +1,131 @@
 import React from 'react';
 
 const TaskList = ({ tasks, onTaskDeleted, onTaskUpdated, onTaskShared }) => {
-    return (
-        <div style={{ marginTop: '20px' }}>
-            <h2 style={{ color: '#555' }}>Task List</h2>
-            <ul style={{ listStyleType: 'none', padding: '0' }}>
-                {tasks.map(task => (
-                    <li 
-                        key={task._id} 
-                        style={{ 
-                            padding: '15px', 
-                            border: '1px solid #ddd', 
-                            marginBottom: '10px', 
-                            borderRadius: '5px', 
-                            backgroundColor: '#f9f9f9',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'flex-end'   // ✅ buttons & badge straight line me
-                        }}
-                    >
-                        <div>
-                            <h3 style={{ margin: '0', color: '#007bff' }}>{task.title}</h3>
-                            <p style={{ margin: '5px 0 0', color: '#666' }}>{task.description}</p>
-                            <span 
-                                style={{ 
-                                    display: 'inline-block', 
-                                    minWidth: '100px',       // ✅ size stable
-                                    textAlign: 'center',
-                                    whiteSpace: 'nowrap',    // ✅ "In Progress" ek line me
-                                    padding: '5px 10px', 
-                                    borderRadius: '15px', 
-                                    color: 'white', 
-                                    backgroundColor: 
-                                        task.status === 'Completed' ? '#28a745' :
-                                        task.status === 'In Progress' ? '#ffc107' : '#dc3545' 
-                                }}
-                            >
-                                {task.status}
-                            </span>
-                        </div>
+  const getStatusBg = (status) => {
+    if (status === 'Completed') return '#28a745';
+    if (status === 'In Progress') return '#ffc107';
+    return '#dc3545'; // Pending
+  };
 
-                        {/* ✅ Buttons aligned properly */}
-                        <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-end' }}>
-                            <button 
-                                onClick={() => onTaskUpdated(task)}
-                                style={btnStyleBlue}
-                            >
-                                Update
-                            </button>
-                            <button 
-                                onClick={() => onTaskDeleted(task._id)}
-                                style={btnStyleRed}
-                            >
-                                Delete
-                            </button>
-                            <button 
-                                onClick={() => onTaskShared(task._id)}
-                                style={btnStyleGreen}
-                            >
-                                Share
-                            </button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+  return (
+    <div style={{ marginTop: 20 }}>
+      <h2 
+  style={{ 
+    color: '#444', 
+    marginBottom: 20, 
+    textAlign: 'center', 
+    fontSize: 22, 
+    borderBottom: '2px solid #ddd', 
+    paddingBottom: 10 
+  }}
+>
+  Task List
+</h2>
+
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gap: 16,
+        }}
+      >
+        {tasks.map((task) => (
+          <div
+            key={task._id}
+            style={{
+              background: '#fff',
+              borderRadius: 12,
+              border: '1px solid #eee',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+              padding: 16,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              transition: 'transform 0.15s ease',
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.transform = 'translateY(-3px)')
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.transform = 'translateY(0)')
+            }
+          >
+            {/* Title + Status */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <h3 style={{ margin: 0, fontSize: 18, color: '#007bff', flex: 1, marginRight: 8 }}>
+                {task.title}
+              </h3>
+              <span
+                style={{
+                  padding: '4px 10px',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  borderRadius: 20,
+                  color: '#fff',
+                  backgroundColor: getStatusBg(task.status),
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {task.status}
+              </span>
+            </div>
+
+            {/* Description */}
+            {task.description && (
+              <p style={{ color: '#555', fontSize: 14, margin: '0 0 12px' }}>
+                {task.description}
+              </p>
+            )}
+
+            {/* Buttons */}
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 8,
+                marginTop: 'auto',
+              }}
+            >
+              <button
+                onClick={() => onTaskUpdated(task)}
+                style={buttonStyle('#007bff')}
+              >
+                Update
+              </button>
+              <button
+                onClick={() => onTaskDeleted(task._id)}
+                style={buttonStyle('#dc3545')}
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => onTaskShared(task._id)}
+                style={buttonStyle('#20c997')}
+              >
+                Share
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
-// 🎨 Reusable button styles
-const btnStyleBlue = {
-    padding: '8px 12px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '14px'
-};
-
-const btnStyleRed = {
-    padding: '8px 12px',
-    backgroundColor: '#dc3545',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '14px'
-};
-
-const btnStyleGreen = {
-    padding: '8px 12px',
-    backgroundColor: '#20c997',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '14px'
-};
+// Reusable button style
+const buttonStyle = (bg) => ({
+  flex: '1 1 80px',
+  minWidth: 80,
+  padding: '8px 10px',
+  backgroundColor: bg,
+  color: '#fff',
+  border: 'none',
+  borderRadius: 6,
+  cursor: 'pointer',
+  fontSize: 14,
+  fontWeight: 500,
+  boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+});
 
 export default TaskList;
