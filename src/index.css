@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-/* Variables */
+
 :root {
   --background-color: #f4f6f8;
   --text-color: #34495e;
@@ -27,7 +27,7 @@ body.dark {
   --input-text: #ffffff;
 }
 
-/* Base */
+
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
@@ -54,7 +54,7 @@ body {
   to { transform: scale(1); opacity: 1; }
 }
 
-/* Title */
+
 .main-title {
   text-align: center;
   font-size: 2.5rem;
@@ -62,7 +62,7 @@ body {
   text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
-/* Header Bar */
+
 .header-bar {
   display: flex;
   justify-content: flex-end;
@@ -90,7 +90,7 @@ body {
   background: #c0392b;
 }
 
-/* Search */
+
 .search-filter-container {
   display: flex;
   gap: 10px;
@@ -107,7 +107,7 @@ body {
   color: var(--input-text);
 }
 
-/* Task Card */
+
 .task-card {
   background: var(--card-background);
   border: 1px solid var(--border-color);
@@ -118,7 +118,7 @@ body {
   animation: popIn 0.4s ease;
 }
 
-/* Analytics Dashboard Boxes */
+
 .analytics-box {
   background: var(--card-background);
   border: 1px solid var(--border-color);
@@ -131,19 +131,19 @@ body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* dark mode ke liye fix */
+
 body.dark .analytics-box {
   background: #2c2c2c;
   color: #ffffff;
   border: 1px solid #444;
 }
 
-/* status colors */
+
 .analytics-box.pending { color: var(--pending-color); }
 .analytics-box.inprogress { color: var(--in-progress-color); }
 .analytics-box.completed { color: var(--completed-color); }
 
-/* Notifications */
+
 .notification-container {
   border: 2px solid #2ecc71;
   background: #1abc9c;
@@ -154,7 +154,7 @@ body.dark .analytics-box {
   animation: fadeIn 0.5s ease;
 }
 
-/* Modals */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -197,7 +197,7 @@ body.dark .analytics-box {
 .modal-button.cancel { background: #7f8c8d; }
 .modal-button.share { background: #27ae60; }
 
-/* Responsive */
+
 @media (max-width: 600px) {
   .app-container { padding: 10px; }
   .main-title { font-size: 2rem; }
@@ -209,7 +209,7 @@ body.dark .analytics-box {
 
 
 
-/* ========== Analytics Dashboard Styles ========== */
+
 
 .analytics-container {
   padding: 20px;

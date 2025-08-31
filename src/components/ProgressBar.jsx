@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ProgressBar = ({ tasks }) => {
-    // Agar tasks array nahi hai ya khali hai, to progress 0% hai
+    
     if (!tasks || tasks.length === 0) {
         return (
             <div style={{ margin: '20px 0', textAlign: 'center' }}>
@@ -18,11 +18,11 @@ const ProgressBar = ({ tasks }) => {
         );
     }
 
-    // Completed tasks count karein
+    
     const completedTasks = tasks.filter(task => task.status === 'Completed').length;
-    // Total tasks count karein
+    
     const totalTasks = tasks.length;
-    // Percentage calculate karein
+    
     const progress = Math.round((completedTasks / totalTasks) * 100);
 
     return (

@@ -1,27 +1,52 @@
 import React from 'react';
 
-const TaskList = ({ tasks, onTaskDeleted, onTaskUpdated, onTaskShared }) => {
+const TaskList = ({ tasks, onTaskDeleted, onTaskUpdated }) => {
   const getStatusBg = (status) => {
     if (status === 'Completed') return '#28a745';
     if (status === 'In Progress') return '#ffc107';
-    return '#dc3545'; // Pending
+    return '#dc3545'; 
+  };
+
+  const shareTask = (task) => {
+    const shareText = `Task: ${task.title}\nDescription: ${task.description || ''}\nStatus: ${task.status}`;
+
+    if (navigator.share) {
+      // ✅ Native share API (mobile + some browsers)
+      navigator.share({
+        title: 'Task Manager App',
+        text: shareText,
+        url: window.location.href
+      }).catch(err => console.log('Share cancelled:', err));
+    } else {
+      // ✅ Fallback (Desktop etc.)
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(shareText)}`;
+      const emailUrl = `mailto:?subject=Task Shared&body=${encodeURIComponent(shareText)}`;
+
+      const choice = window.prompt(
+        "Share via:\n1 = WhatsApp\n2 = Facebook\n3 = Email\n\nEnter choice:"
+      );
+
+      if (choice === "1") window.open(whatsappUrl, "_blank");
+      if (choice === "2") window.open(facebookUrl, "_blank");
+      if (choice === "3") window.location.href = emailUrl;
+    }
   };
 
   return (
     <div style={{ marginTop: 20 }}>
       <h2 
-  style={{ 
-    color: '#444', 
-    marginBottom: 20, 
-    textAlign: 'center', 
-    fontSize: 22, 
-    borderBottom: '2px solid #ddd', 
-    paddingBottom: 10 
-  }}
->
-  Task List
-</h2>
-
+        style={{ 
+          color: '#444', 
+          marginBottom: 20, 
+          textAlign: 'center', 
+          fontSize: 22, 
+          borderBottom: '2px solid #ddd', 
+          paddingBottom: 10 
+        }}
+      >
+        Task List
+      </h2>
 
       <div
         style={{
@@ -100,7 +125,7 @@ const TaskList = ({ tasks, onTaskDeleted, onTaskUpdated, onTaskShared }) => {
                 Delete
               </button>
               <button
-                onClick={() => onTaskShared(task._id)}
+                onClick={() => shareTask(task)}
                 style={buttonStyle('#20c997')}
               >
                 Share
@@ -113,7 +138,6 @@ const TaskList = ({ tasks, onTaskDeleted, onTaskUpdated, onTaskShared }) => {
   );
 };
 
-// Reusable button style
 const buttonStyle = (bg) => ({
   flex: '1 1 80px',
   minWidth: 80,
